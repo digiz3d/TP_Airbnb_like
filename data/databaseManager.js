@@ -2,6 +2,8 @@ var fs = require('fs');
 var clone = require('clone');
 var usersDb = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
 var housesDb = JSON.parse(fs.readFileSync('./data/housing.json', 'utf8'));
+var mongoose = require('mongoose');
+mongoose.connect("mongodb://admin:test@airbnblike-shard-00-00-rcbjh.mongodb.net:27017,airbnblike-shard-00-01-rcbjh.mongodb.net:27017,airbnblike-shard-00-02-rcbjh.mongodb.net:27017/test?ssl=true&replicaSet=airbnblike-shard-0&authSource=admin");
 
 function checkHouseDates(houseId, startDate, endDate) {
     for (let dateTuple in housesDb[houseId].bookedDates) {
