@@ -2,9 +2,69 @@ var fs = require('fs');
 var clone = require('clone');
 var usersDb = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
 var housesDb = JSON.parse(fs.readFileSync('./data/housing.json', 'utf8'));
+var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
-mongoose.connect("mongodb://admin:test@airbnblike-shard-00-00-rcbjh.mongodb.net:27017,airbnblike-shard-00-01-rcbjh.mongodb.net:27017,airbnblike-shard-00-02-rcbjh.mongodb.net:27017/test?ssl=true&replicaSet=airbnblike-shard-0&authSource=admin");
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://admin:test@airbnblike-shard-00-00-rcbjh.mongodb.net:27017,airbnblike-shard-00-01-rcbjh.mongodb.net:27017,airbnblike-shard-00-02-rcbjh.mongodb.net:27017/db?ssl=true&replicaSet=airbnblike-shard-0&authSource=admin");
 
+var User = mongoose.model("User", new mongoose.Schema({
+    email: String,
+    password: String,
+    firstname: String,
+    lastname: String,
+    token: String
+}));
+
+var Appartement = mongoose.model("Appartement", new mongoose.Schema({
+    name: String,
+    description: String,
+    city: String,
+    price: Number,
+    beds: Number,
+    rooms: Number
+}));
+
+var Booking = mongoose.model("Booking", new mongoose.Schema({
+    start: Date,
+    end: Date,
+    id_appartement: String,
+    id_user: String
+}));
+/*
+var premierUtilisateur = new user({
+    "email": "josiane32ans@gmail.com",
+    "password": "$2a$10$W1oC8PMuZaezaKNpSMJqvOlCBlHZHfM7oYBouNV/Yxw9ZEJvZyQz.",
+    "lastname": "Le Maire",
+    "firstname": "Josiane",
+    "token" : ""
+});
+premierUtilisateur.save(function (err) {if (err) console.log ('Error on save!')});
+
+var premierPPartement = new appartement({
+    name: "Maison blanche",
+    description: "Un truc de dirigeant",
+    city: "Washington",
+    price: 42,
+    beds: 69,
+    rooms: 115,
+    // bookedDates: [
+    //     {
+    //         start: new Date(2014,1,1),
+    //         end: new Date(2014,1,15)
+    //     }
+    // ]
+});
+premierPPartement.save(function (err) {if (err) console.log ('Error on save!')});
+
+var nouvelleReservation = new booking({
+    start: new Date(2014,1,1),
+    end: new Date(2014,1,15),
+    id_appartement: "Maison blanche",
+    id_user: "patrick.dupont@gmail.com"
+});
+
+nouvelleReservation.save(function (err) {if (err) console.log ('Error on save!')});
+*/
 function checkHouseDates(houseId, startDate, endDate) {
     for (let dateTuple in housesDb[houseId].bookedDates) {
         if ((Date.parse(startDate) >= Date.parse(housesDb[houseId].bookedDates[dateTuple].start) &&     /* date de départ   supérieure à la date de départ  réservée */
@@ -20,21 +80,23 @@ function checkHouseDates(houseId, startDate, endDate) {
 }
 
 module.exports = {
-    getUserNoPassword: function (username) {
-        let user = usersDb[username] || null;
-        /* so we don't delete the original password :^) */
-        let ret = clone(user);
-        if (ret.password) delete ret.password;
-        return ret;
+    createUser: function(email, password, firstname, lastname) {
+        var newUser = new User({
+            email: email,
+            password: bcrypt.hashSync(password, 10),
+            firstname: firstname,
+            lastname: lastname
+        });
+        newUser.save(function (err) {if (err) console.log ('Error on save!')});
     },
-    getUser: function (username) {
-        return usersDb[username] || null;
+    getUser: function (email) {
+        return User.findOne({'email': email}, 'email firstname lastname').exec();
     },
     getUsers: function () {
-        return usersDb;
+        return User.find({},'email firstname lastname').exec();
     },
-    setUserInfo: function (username, key, value = null) {
-        usersDb[username][key] = value;
+    setUserInfo: function (email, key, value) {
+        return User.update({email: email}, {"$set": {[key]: value}}).exec();
     },
     setUserToken: function (username, token) {
         usersDb[username].token = token;
