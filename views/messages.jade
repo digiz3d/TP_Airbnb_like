@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Messages
+  form
+    input(id="inputmsg",)
+    button(id="sendmsg") Send
+  div(id="chatmsg")
+  script(src="https://code.jquery.com/jquery-3.2.1.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js")
+  script.
+    var socket = io('http://localhost:3001');
+    $('form').submit(function(){
+      if ($('#inputmsg').val().trim() !== ''){
+        socket.emit('message', $('#inputmsg').val());
+      }
+      $('#inputmsg').val('');
+      return false;
+    });
+    socket.on('message', function(msg){
+      $('#chatmsg').prepend($('<div class="msg">').text(msg));
+    });

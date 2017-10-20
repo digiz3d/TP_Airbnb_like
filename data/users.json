@@ -1,0 +1,16 @@
+{
+    "Lee": {
+        "password": "$2a$10$lpeaYT/KH.3Cy4woaU7QDOmWHoFgEgJGib6aWcgGo8wm6XXZo2Hze",
+        "lastname": "Dupont",
+        "firstname": "Patrick",
+        "email": "patrick.dupont@gmail.com",
+        "token" : ""
+    },
+    "Jo": {
+        "password": "$2a$10$W1oC8PMuZaezaKNpSMJqvOlCBlHZHfM7oYBouNV/Yxw9ZEJvZyQz.",
+        "lastname": "Le maire",
+        "firstname": "Josiane",
+        "email": "josiane32ans@gmail.com",
+        "token" : ""
+    }
+}

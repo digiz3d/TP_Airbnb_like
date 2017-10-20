@@ -1,0 +1,52 @@
+{
+    "1": {
+        "name": "sweet dreams",
+        "description": "---",
+        "price": 67,
+        "beds": 1,
+        "dispo": true,
+        "city": "Paris",
+        "bookedDates": [
+            {
+                "start": "2017-01-12",
+                "end": "2017-01-15"
+            },
+            {
+                "start": "2017-02-01",
+                "end": "2017-03-01"
+            }
+        ]
+    },
+    "2": {
+        "name": "party hard",
+        "description": "---",
+        "price": 100,
+        "beds": 4,
+        "dispo": false,
+        "city": "New-York"
+    },
+    "3": {
+        "name": "container",
+        "description": "---",
+        "price": 15,
+        "beds": 0,
+        "dispo": true,
+        "city": "Berlin"
+    },
+    "4": {
+        "name": "empty room",
+        "description": "---",
+        "price": 33,
+        "beds": 2,
+        "dispo": true,
+        "city": "Paris"
+    },
+    "5": {
+        "name": "cheap luxury",
+        "description": "---",
+        "price": 44,
+        "beds": 2,
+        "dispo": false,
+        "city": "Paris"
+    }
+}
