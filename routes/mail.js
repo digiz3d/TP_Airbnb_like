@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
     res.send("we send emails from here");
 });
 
-router.post('/send/:to/:subject/:message', function(req, res) {
+router.get('/send/:to/:subject/:message', function(req, res) {
     var transport = mailer.getMailer()
     transport.sendMail(mailer.getMessage(req.params.to, req.params.subject, req.params.message), function(error, info){
         if(error){
@@ -19,5 +19,9 @@ router.post('/send/:to/:subject/:message', function(req, res) {
             res.send("mail send to "+req.params.to);
         }
     });
+
+
+
+
 });
 module.exports = router;

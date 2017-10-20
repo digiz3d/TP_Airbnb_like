@@ -1,12 +1,16 @@
 var nodemailer = require('nodemailer');
 
 var config = {
-    host: 'smtp.gmail.com',
+    host: "smtp-mail.outlook.com",
+    secureConnection: false,
     port: 587,
-    secure: false,
     auth: {
-        user: 'cpe.development.global@gmail.com',
-        pass: '6@Z*!LKu=Lns`.Gdnzi8k"*wyr$.Y*'
+        user: 'ApiAirbnbLike@outlook.com',
+        pass: 'r41NBow$'
+    },
+    tls: {
+        ciphers: "SSLv3",
+        rejectUnauthorized: false
     }
 };
 
@@ -18,7 +22,7 @@ module.exports = {
     },
     getMessage: function (toUserMail, mailSubject, message) {
         var message = {
-            from: 'cpe.development.global@gmail.com',
+            from: 'ApiAirbnbLike@outlook.com',
             to: toUserMail,
             subject: mailSubject,
             text: message
