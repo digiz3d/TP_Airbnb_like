@@ -15,8 +15,6 @@ var mail = require('./routes/mail');
 var messages = require('./routes/messages');
 var app = express();
 
-
-
 var socketioserver = require('http').createServer(function(req,res) {
     res.writeHead(400, {'Content-Type': 'text/html'});
     res.end('websocket server :)');
