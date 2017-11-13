@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
+const User = require('../app/models/user');
 
 router.patch('/', function(req, res) {
-    User.findOne({ login: req.body.login }, function (err, user) {
+    User.findOne({ email: req.body.email }, function (err, user) {
         if (err) throw err;
 
         if (!user) {
@@ -16,7 +19,7 @@ router.patch('/', function(req, res) {
                 }
                 else {                    
                     if (result) {
-                        let token = jwt.sign({ id: user.id, login: user.login, email: user.email }, config.jwtSecret, { expiresIn: 60 * 60 });
+                        let token = jwt.sign({ id: user._id, email: user.email }, config.jwt.secret, { expiresIn: 60 * 60 });
                         res.cookie('token', token);
                         res.json({
                             success: true,

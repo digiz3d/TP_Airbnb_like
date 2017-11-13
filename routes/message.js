@@ -6,8 +6,8 @@ router.get('/',function(req, res) {
     res.render('messages');
 });
 
-router.post('/:message', function(req, res){
-    io.sendMessage(req.params.message);
+router.post('/', function(req, res){
+    io.sendMessage(req.body.text);
     res.send('ok');
 });
 module.exports = router;

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const http = require('http');
 const socketio = require('socket.io');
+const jwt = require('jsonwebtoken');
 
 // custom modules
 const config = require('./config');
@@ -48,7 +49,7 @@ app.use(function (req, res, next) {
   let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
 
   if (token) {
-    jwt.verify(token, config.jwtSecret, function (err, decoded) {
+    jwt.verify(token, config.jwt.secret, function (err, decoded) {
       if (err) {
         return res.json({
           success: false,

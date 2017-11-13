@@ -13,13 +13,10 @@ router.get('/', function (req, res) {
 //Return all booking for an appartment
 router.get('/:id', function (req, res) {
     Apartment.findOne({ _id: req.params.id }, function (err, appart) {
-
-        res.json(appart);
-
         if (err) throw err;
 
         if (appart) {
-            Booking.find({ start: req.params.startDate, end: req.params.endDate, apartment: appart._id }, function (err2, boo) {
+            Booking.find({ apartment: appart._id }, function (err2, boo) {
                 res.json(boo);
             });
         }

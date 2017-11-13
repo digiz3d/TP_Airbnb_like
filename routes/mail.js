@@ -7,7 +7,8 @@ router.get('/', function(req, res) {
     res.send("we send emails from here");
 });
 
-router.get('/send/:to/:subject/:message', function(req, res) {
-    mailer.send(req.params.to, req.params.subject, req.params.message);
+router.post('/', function(req, res) {
+    mailer.send(req.body.to, req.body.subject, req.body.message);
+    res.send({success: true});
 });
 module.exports = router;
