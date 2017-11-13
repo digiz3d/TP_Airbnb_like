@@ -3,33 +3,9 @@ var clone = require('clone');
 var usersDb = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
 var housesDb = JSON.parse(fs.readFileSync('./data/housing.json', 'utf8'));
 var bcrypt = require('bcrypt');
-var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+
 mongoose.connect("mongodb://admin:test@airbnblike-shard-00-00-rcbjh.mongodb.net:27017,airbnblike-shard-00-01-rcbjh.mongodb.net:27017,airbnblike-shard-00-02-rcbjh.mongodb.net:27017/db?ssl=true&replicaSet=airbnblike-shard-0&authSource=admin");
 
-var User = mongoose.model("User", new mongoose.Schema({
-    email: String,
-    password: String,
-    firstname: String,
-    lastname: String,
-    token: String
-}));
-
-var Appartement = mongoose.model("Appartement", new mongoose.Schema({
-    name: String,
-    description: String,
-    city: String,
-    price: Number,
-    beds: Number,
-    rooms: Number
-}));
-
-var Booking = mongoose.model("Booking", new mongoose.Schema({
-    start: Date,
-    end: Date,
-    id_appartement: String,
-    id_user: String
-}));
 /*
 var premierUtilisateur = new user({
     "email": "josiane32ans@gmail.com",

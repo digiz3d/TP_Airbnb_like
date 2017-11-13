@@ -1,32 +1,19 @@
-var nodemailer = require('nodemailer');
+const config = require('./config');
+const nodeMailer = require('nodemailer');
 
-var config = {
-    host: "smtp-mail.outlook.com",
-    secureConnection: false,
-    port: 587,
-    auth: {
-        user: 'ApiAirbnbLike@outlook.com',
-        pass: 'r41NBow$'
-    },
-    tls: {
-        ciphers: "SSLv3",
-        rejectUnauthorized: false
-    }
-};
+let transporter = nodeMailer.createTransport(config.mail);
 
-var transporter = nodemailer.createTransport(config);
+function send(to, subject, message) {
+    let email = {
+        from: config.mail.auth.user,
+        to: to,
+        subject: subject,
+        text: message
+      };
+      console.log("################ bravo");
+    transporter.sendMail(email);
+}
 
 module.exports = {
-    getMailer: function () {
-        return transporter;
-    },
-    getMessage: function (toUserMail, mailSubject, message) {
-        var message = {
-            from: 'ApiAirbnbLike@outlook.com',
-            to: toUserMail,
-            subject: mailSubject,
-            text: message
-        };
-        return message;
-    }
+    send : send
 }

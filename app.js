@@ -1,21 +1,32 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+//generic modules
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const http = require('http');
+const socketio = require('socket.io');
+
+// custom modules
+const config = require('./config');
 
 //Add router files here (controller like)
-var index = require('./routes/index');
-var users = require('./routes/users');
-var login = require('./routes/login');
-var search = require('./routes/search');
-var book = require('./routes/book');
-var mail = require('./routes/mail');
-var messages = require('./routes/messages');
-var app = express();
+const index = require('./routes/index');
+const user = require('./routes/user');
+const authenticate = require('./routes/authenticate');
+const apartment = require('./routes/apartment');
+const book = require('./routes/book');
+const mail = require('./routes/mail');
+const message = require('./routes/message');
 
-var socketioserver = require('http').createServer(function(req,res) {
+mongoose.Promise = global.Promise;
+mongoose.connect(config.mongodb.url);
+const app = express();
+
+
+const socketioserver = http.createServer(function(req,res) {
     res.writeHead(400, {'Content-Type': 'text/html'});
     res.end('websocket server :)');
 }).listen(3001, function() {
@@ -23,7 +34,7 @@ var socketioserver = require('http').createServer(function(req,res) {
 });
 
 // no "var" keyword or the variable is local to this module.
-io = require('socket.io')(socketioserver);
+io = socketio(socketioserver);
 
 io.on('connection', function(socket){
     socket.on('message', function(msg){
@@ -43,14 +54,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Add default routes to router (controller prefix like)
+//routes
 app.use('/', index);
-app.use('/users', users);
-app.use('/login', login);
-app.use('/search', search);
+app.use('/authenticate', authenticate);
+
+//secure the following routes of this api
+app.use(function (req, res, next) {
+  let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
+
+  if (token) {
+    jwt.verify(token, config.jwtSecret, function (err, decoded) {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Failed to authenticate token.'
+        });
+      } else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+  }
+  else {
+    return res.status(403).json({
+      success: false,
+      message: 'No token provided.'
+    });
+  }
+});
+app.use('/user', user);
+app.use('/apartment', apartment);
 app.use('/book', book);
 app.use('/mail', mail);
-app.use('/messages', messages);
+app.use('/message', message);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

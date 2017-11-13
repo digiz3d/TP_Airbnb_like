@@ -1,15 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var dbContext = require('../data/databaseManager.js');
-var mailer = require('../mailer.js');
+const express = require('express');
+const router = express.Router();
+const mailer = require('../mailer.js');
+const Booking = require('../app/models/booking');
 
-/* GET bookings */
 router.get('/', function(req, res) {
-    res.send(dbContext.getBookings());
+    Booking.find({}, function(err, bkg) {
+        res.json(bkg);
+    });
 });
 
-/* create new booking */
 router.get('/:id/:startDate/:endDate', function(req, res) {
+    Booking.findOne({_id: req.params.id, start: req.params.startDate, end: req.params.endDate}, function(err, bkg) {
+        res.json(bkg);
+    });
+
+    /*
     if (dbContext.getHouseById(req.params.id) != null) {
         if (!dbContext.isHouseBooked(req.params.id, req.params.startDate, req.params.endDate)) {
             dbContext.setHouseBooked(req.params.id, req.params.startDate, req.params.endDate)
@@ -33,6 +38,7 @@ router.get('/:id/:startDate/:endDate', function(req, res) {
         res.status(404);
         res.send("Housing not found");
     }
+    */
 });
 
 module.exports = router;
