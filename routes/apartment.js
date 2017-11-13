@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Apartment = require('../app/models/apartment');
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     Apartment.find({}, function (err, apts) {
         res.json(apts);
     });

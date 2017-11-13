@@ -2,16 +2,30 @@ const express = require('express');
 const router = express.Router();
 const mailer = require('../mailer.js');
 const Booking = require('../app/models/booking');
+const Apartment = require('../app/models/apartment');
 
-router.get('/', function(req, res) {
-    Booking.find({}, function(err, bkg) {
+router.get('/', function (req, res) {
+    Booking.find({}, function (err, bkg) {
         res.json(bkg);
     });
 });
 
-router.get('/:id/:startDate/:endDate', function(req, res) {
-    Booking.findOne({_id: req.params.id, start: req.params.startDate, end: req.params.endDate}, function(err, bkg) {
-        res.json(bkg);
+//Return all booking for an appartment
+router.get('/:id', function (req, res) {
+    Apartment.findOne({ _id: req.params.id }, function (err, appart) {
+
+        res.json(appart);
+
+        if (err) throw err;
+
+        if (appart) {
+            Booking.find({ start: req.params.startDate, end: req.params.endDate, apartment: appart._id }, function (err2, boo) {
+                res.json(boo);
+            });
+        }
+        else {
+            res.json({ success: false });
+        }
     });
 
     /*

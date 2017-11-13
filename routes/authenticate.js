@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-router.patch('/', function(res,req) {
+router.patch('/', function(req, res) {
     User.findOne({ login: req.body.login }, function (err, user) {
         if (err) throw err;
 
@@ -14,7 +14,7 @@ router.patch('/', function(res,req) {
                 if (err) {
                     res.status(500).json({ success: false, message: err.message });
                 }
-                else {
+                else {                    
                     if (result) {
                         let token = jwt.sign({ id: user.id, login: user.login, email: user.email }, config.jwtSecret, { expiresIn: 60 * 60 });
                         res.cookie('token', token);
@@ -23,7 +23,6 @@ router.patch('/', function(res,req) {
                             message: 'Enjoy your token!',
                             token: token
                         });
-
                     }
                     else {
                         res.status(401).json({ success: false, message: 'Wrong username or password' });

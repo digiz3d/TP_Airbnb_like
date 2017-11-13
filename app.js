@@ -26,21 +26,6 @@ mongoose.connect(config.mongodb.url);
 const app = express();
 
 
-const socketioserver = http.createServer(function(req,res) {
-    res.writeHead(400, {'Content-Type': 'text/html'});
-    res.end('websocket server :)');
-}).listen(3001, function() {
-    console.log('listening on *:3001');
-});
-
-// no "var" keyword or the variable is local to this module.
-io = socketio(socketioserver);
-
-io.on('connection', function(socket){
-    socket.on('message', function(msg){
-      io.emit('message', msg);
-    });
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

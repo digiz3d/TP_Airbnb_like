@@ -1,12 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const io = require('../io');
+const express = require('express');
+const router = express.Router();
 
 router.get('/',function(req, res) {
     res.render('messages');
 });
 
 router.post('/:message', function(req, res){
-    io.emit('message', req.params.message);
+    io.sendMessage(req.params.message);
     res.send('ok');
 });
 module.exports = router;
