@@ -46,8 +46,14 @@ router.post('/', function(req, res) {
             
             Booking.find({
                 apartment: appart._id,
-                start: { $lt: req.body.start },
-                end: { $gt : req.body.end }
+                $or : [{
+                    start : {$lt : req.params.start},
+                    end: {$lt: req.params.start}
+                },
+                {
+                    start: {$gt : req.params.end},
+                    end: {$gt: req.params.end}
+                }]
             }, function(err2, books) {
                 if (err2) {
                     return res.status(500).json({
@@ -55,14 +61,9 @@ router.post('/', function(req, res) {
                         message: 'An error occured !!!'
                     });
                 }
-
-                if (books.length !== 0) {
-                    res.status(409).json({
-                        success: false,
-                        message: 'Already booked at this date.'
-                    });
-                }
-                else {
+                res.json(books);
+                /*
+                if (books.length === 0) {
                     let booking = new Booking({
                         start: req.body.start,
                         end: req.body.end,
@@ -76,15 +77,19 @@ router.post('/', function(req, res) {
                                 message: 'An error occured'
                             });
                         }
-                        
-
                         res.json({
                             success: true,
                             message: 'You just booked this place.'
                         });
                     });
-                    
                 }
+                else {
+                    res.status(409).json({
+                        success: false,
+                        message: 'Already booked at this date.'
+                    });
+                }
+                */
             });
         }
         else {
