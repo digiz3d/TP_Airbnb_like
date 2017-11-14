@@ -7,7 +7,12 @@ const User = require('../app/models/user');
 
 router.patch('/', function(req, res) {
     User.findOne({ email: req.body.email }, function (err, user) {
-        if (err) throw err;
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'An error occured'
+            });
+        }
 
         if (!user) {
             res.status(404).json({ success: false, message: 'Authentication failed. User not found.' });
