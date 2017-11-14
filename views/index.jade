@@ -7,49 +7,41 @@ block content
   p The following routes can be used:
   ul
     li
-      p <b>GET /login</b>
-        <br/>display login form
+      p <b>PATCH /authenticate</b>
+        <br/>body values (application/x-www-form-urlencoded) : email , password
     li
-      p <b>POST /login</b>
-        <br/>body values (application/x-www-form-urlencoded) : username , password
-        <br/>attempt to login using values from the form
-        <br/><b>mandatory for booking, managing profile or messaging</b>
+      p <b>GET /user</b>
+        <br/>get user list
     li
-      p <b>GET /search</b>
-        <br/>to search for all houses use
+      p <b>GET /user/<i>mail</i></b>
+        <br/>to search a user based on his email
     li
-      p <b>GET /search/<i>city</i>?xxx</b>
+      p <b>GET /apartment</b>
+        <br/>get apartment list
+    li
+      p <b>GET /apartment/<i>city</i></b>
         <br/>to search for all houses from a specific city
-        <br/>Avaible query strings are (all integers) : beds(number of beds), priceMin (minimum price), priceMax(maximum price)
     li
-      p <b>GET /search/<i>city</i>/<i>startDate</i>/<i>endDate</i>?xxx</b>
-        <br/>to search for all houses from a specific city avaible between the specified dates
-        <br/>Avaible query strings are (all integers) : beds(number of beds), priceMin (minimum price), priceMax(maximum price)
+      p <b>GET /book</b>
+        <br/>get booking list
     li
-      p <b>POST /book/<i>id</i>/<i>startDate</i>/<i>endDate</i></b> books the specified house id for the given dates
+      p <b>GET /book/<i>IdApartment</i></b>
+        <br/>get booking list for an apartment
     li
-      p <b>POST /send/to/subject/message</b>
+      p <b>POST /book</b>
+        <br/>get booking list
+        <br>body values (application/x-www-form-urlencoded) : apartment, start, end
+    li
+      p <b>POST /mail</b>
         <br/>to send an email
+        <br/>body values (application/x-www-form-urlencoded) : to, subject, message
         <br/>to = email that will receive the emails
         <br/>subject = subject of the email
         <br/>message = text content of the email
     li
-      p <b>GET /users/<i>userid</i></b>
-        <br/>get user infos
-        <br/><i>userid</i> is the user's ID
+      p <b>GET /message</b>
+        <br/>messaging html interface
     li
-      p <b>GET /users/<i>userid</i>/<i>information</i></b>
-        <br/><i>userid</i> is the user's ID
-        <br/><i>information</i> can be lastname, firstname, email...
-    li
-      p <b>PATCH /users/<i>userid</i>/<i>information</i></b>
-        <br/>body value (application/x-www-form-urlencoded) : value
-        <br/><i>userid</i> is the user's ID
-        <br/><i>information</i> can be lastname, firstname, email...
-    li
-      p <b>GET /messages</b>
-        <br/>page where you can have a form to send real-time messages and view all the messages in real-time
-    li
-      p <b>POST /messages/<i>message</i></b>
-        <br/><i>message</i> is the message you want to send
-      
+      p <b>POST /message</b>
+        <br/>body values (application/x-www-form-urlencoded) : text
+        <br/>text = the message text
