@@ -42,8 +42,8 @@ router.post('/', function(req, res) {
         }
 
         if (appart) {
-            // TODO : ICI VWALA
-            
+            // Fixme 
+
             Booking.find({
                 apartment: appart._id,
                 $or : [{
